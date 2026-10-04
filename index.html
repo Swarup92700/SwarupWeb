@@ -1,0 +1,696 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anime Store | Anime Merchandise</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #101014;
+            color: white;
+        }
+
+        /* Navigation */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 8%;
+            background: #18181f;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            border-bottom: 1px solid #292932;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+            color: #ff4655;
+        }
+
+        .logo span {
+            color: white;
+        }
+
+        nav a {
+            color: #ddd;
+            text-decoration: none;
+            margin-left: 22px;
+            font-size: 15px;
+        }
+
+        nav a:hover {
+            color: #ff4655;
+        }
+
+        .cart-btn {
+            background: #ff4655;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 400px;
+            padding: 80px 8%;
+            display: flex;
+            align-items: center;
+            background:
+                linear-gradient(90deg, #101014 20%, #101014cc 60%, #10101455),
+                url("https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=1600&q=80")
+                center/cover;
+        }
+
+        .hero-content {
+            max-width: 550px;
+        }
+
+        .hero h1 {
+            font-size: clamp(38px, 6vw, 62px);
+            margin-bottom: 20px;
+            line-height: 1.1;
+        }
+
+        .hero h1 span {
+            color: #ff4655;
+        }
+
+        .hero p {
+            color: #ccc;
+            font-size: 17px;
+            line-height: 1.7;
+            margin-bottom: 25px;
+        }
+
+        .shop-btn {
+            background: #ff4655;
+            padding: 13px 24px;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .shop-btn:hover,
+        .cart-btn:hover {
+            background: #d92f40;
+        }
+
+        /* Products */
+        .products-section {
+            padding: 55px 8%;
+        }
+
+        .section-title {
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+
+        .section-title span {
+            color: #ff4655;
+        }
+
+        .subtitle {
+            color: #aaa;
+            margin-bottom: 25px;
+        }
+
+        .tools {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+
+        .tools input,
+        .tools select {
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid #35353e;
+            background: #1c1c24;
+            color: white;
+            outline: none;
+        }
+
+        .tools input {
+            flex: 1;
+            min-width: 180px;
+        }
+
+        .tools select {
+            min-width: 150px;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 22px;
+        }
+
+        .product-card {
+            background: #1b1b23;
+            border: 1px solid #292932;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: 0.3s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-6px);
+            border-color: #ff4655;
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 230px;
+            object-fit: cover;
+            background: #25252d;
+        }
+
+        .product-info {
+            padding: 16px;
+        }
+
+        .category {
+            color: #ff6572;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .product-info h3 {
+            margin: 10px 0;
+            font-size: 18px;
+        }
+
+        .description {
+            color: #aaa;
+            font-size: 13px;
+            line-height: 1.5;
+            min-height: 38px;
+        }
+
+        .product-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            margin-top: 17px;
+        }
+
+        .price {
+            font-size: 19px;
+            font-weight: bold;
+        }
+
+        .add-btn {
+            padding: 9px 11px;
+            border: none;
+            border-radius: 5px;
+            background: #ff4655;
+            color: white;
+            cursor: pointer;
+        }
+
+        .add-btn:hover {
+            background: #d92f40;
+        }
+
+        .empty-message {
+            color: #aaa;
+            padding: 30px 0;
+            grid-column: 1 / -1;
+        }
+
+        /* About */
+        .about {
+            text-align: center;
+            padding: 55px 8%;
+            background: #191920;
+        }
+
+        .about h2 {
+            font-size: 30px;
+            margin-bottom: 15px;
+        }
+
+        .about h2 span {
+            color: #ff4655;
+        }
+
+        .about p {
+            color: #bbb;
+            max-width: 650px;
+            margin: auto;
+            line-height: 1.8;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #888;
+            font-size: 14px;
+        }
+
+        /* Cart popup */
+        .cart-panel {
+            position: fixed;
+            right: -400px;
+            top: 0;
+            width: 350px;
+            max-width: 90%;
+            height: 100vh;
+            overflow-y: auto;
+            background: #1b1b23;
+            padding: 25px;
+            z-index: 20;
+            transition: 0.3s;
+            box-shadow: -5px 0 20px #0008;
+        }
+
+        .cart-panel.open {
+            right: 0;
+        }
+
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .close-btn {
+            font-size: 25px;
+            border: none;
+            background: none;
+            color: white;
+            cursor: pointer;
+        }
+
+        .cart-item {
+            border-bottom: 1px solid #333;
+            padding: 14px 0;
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .cart-item small {
+            display: block;
+            color: #aaa;
+            margin-top: 6px;
+        }
+
+        .remove-btn {
+            background: none;
+            color: #ff6572;
+            border: none;
+            cursor: pointer;
+            margin-top: 7px;
+        }
+
+        .total {
+            margin: 25px 0;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            background: #ff4655;
+            border: none;
+            color: white;
+            padding: 13px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        @media (max-width: 1000px) {
+            .product-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 600px) {
+            header {
+                padding: 16px 5%;
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+
+            nav {
+                order: 3;
+                width: 100%;
+            }
+
+            nav a {
+                margin: 0 12px 0 0;
+            }
+
+            .hero {
+                padding: 60px 5%;
+                min-height: 350px;
+            }
+
+            .products-section {
+                padding: 40px 5%;
+            }
+
+            .product-grid {
+                gap: 12px;
+            }
+
+            .product-card img {
+                height: 170px;
+            }
+
+            .product-info {
+                padding: 11px;
+            }
+
+            .product-info h3 {
+                font-size: 15px;
+            }
+
+            .product-bottom {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="logo">ANIME<span>STORE</span></div>
+
+        <nav>
+            <a href="#home">Home</a>
+            <a href="#products">Products</a>
+            <a href="#about">About</a>
+        </nav>
+
+        <button class="cart-btn" onclick="toggleCart()">
+            🛒 Cart (<span id="cart-count">0</span>)
+        </button>
+    </header>
+
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>ENTER THE<br><span>ANIME WORLD</span></h1>
+
+            <p>
+                Discover your favorite anime merchandise.
+                From collectible figures to stylish accessories,
+                bring your favorite anime characters home.
+            </p>
+
+            <button class="shop-btn"
+                onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">
+                Explore Collection →
+            </button>
+        </div>
+    </section>
+
+    <section class="products-section" id="products">
+        <h2 class="section-title">OUR <span>COLLECTION</span></h2>
+        <p class="subtitle">Find your next favorite anime collectible.</p>
+
+        <div class="tools">
+            <input
+                type="text"
+                id="search"
+                placeholder="Search anime products..."
+                oninput="renderProducts()">
+
+            <select id="category" onchange="renderProducts()">
+                <option value="All">All Categories</option>
+                <option value="Figures">Figures</option>
+                <option value="Clothing">Clothing</option>
+                <option value="Accessories">Accessories</option>
+                <option value="Posters">Posters</option>
+            </select>
+        </div>
+
+        <div class="product-grid" id="product-grid"></div>
+    </section>
+
+    <section class="about" id="about">
+        <h2>ABOUT <span>ANIMESTORE</span></h2>
+        <p>
+            AnimeStore is a fan-inspired destination for anime lovers.
+            Explore collectibles, clothing, posters, and accessories
+            inspired by the amazing world of anime.
+            Find something that matches your fandom!
+        </p>
+    </section>
+
+    <footer>
+        © 2026 AnimeStore. Made with ❤️ for anime fans.
+    </footer>
+
+    <!-- Shopping Cart -->
+    <div class="cart-panel" id="cart-panel">
+        <div class="cart-header">
+            <h2>Your Cart 🛒</h2>
+            <button class="close-btn" onclick="toggleCart()">×</button>
+        </div>
+
+        <div id="cart-items"></div>
+
+        <div class="total">
+            Total: ₹<span id="cart-total">0</span>
+        </div>
+
+        <button class="checkout-btn" onclick="checkout()">
+            Place Demo Order
+        </button>
+    </div>
+
+    <script>
+        // Product data
+        const products = [
+            {
+                id: 1,
+                name: "Luffy Figure",
+                category: "Figures",
+                price: 799,
+                description: "A collectible inspired by One Piece.",
+                image: "https://images.unsplash.com/photo-1608889825103-eb5ed706fc64?auto=format&fit=crop&w=600&q=80"
+            },
+            {
+                id: 2,
+                name: "Anime Hoodie",
+                category: "Clothing",
+                price: 999,
+                description: "Comfortable streetwear for anime fans.",
+                image: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=600&q=80"
+            },
+            {
+                id: 3,
+                name: "Anime Collectible",
+                category: "Figures",
+                price: 649,
+                description: "Add a new collectible to your shelf.",
+                image: "https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=600&q=80"
+            },
+            {
+                id: 4,
+                name: "Anime Poster",
+                category: "Posters",
+                price: 199,
+                description: "Decorate your room with anime art.",
+                image: "https://images.unsplash.com/photo-1577083552431-6e5fd01aa342?auto=format&fit=crop&w=600&q=80"
+            },
+            {
+                id: 5,
+                name: "Anime Accessories",
+                category: "Accessories",
+                price: 299,
+                description: "Small details to show your fandom.",
+                image: "https://images.unsplash.com/photo-1612036782180-6f0b6cd846fe?auto=format&fit=crop&w=600&q=80"
+            },
+            {
+                id: 6,
+                name: "Graphic T-Shirt",
+                category: "Clothing",
+                price: 499,
+                description: "Everyday style with an anime-inspired look.",
+                image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=600&q=80"
+            },
+            {
+                id: 7,
+                name: "Anime Wall Art",
+                category: "Posters",
+                price: 249,
+                description: "Give your walls a creative anime touch.",
+                image: "https://images.unsplash.com/photo-1541961017774-22349e4a1262?auto=format&fit=crop&w=600&q=80"
+            },
+            {
+                id: 8,
+                name: "Anime Keychain",
+                category: "Accessories",
+                price: 149,
+                description: "A fun accessory for your bag or keys.",
+                image: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=600&q=80"
+            }
+        ];
+
+        // Shopping cart
+        let cart = [];
+
+        // Display products
+        function renderProducts() {
+            const grid = document.getElementById("product-grid");
+            const search = document.getElementById("search")
+                .value.toLowerCase().trim();
+            const category = document.getElementById("category").value;
+
+            const filtered = products.filter(product => {
+                const matchesSearch =
+                    product.name.toLowerCase().includes(search) ||
+                    product.category.toLowerCase().includes(search) ||
+                    product.description.toLowerCase().includes(search);
+
+                const matchesCategory =
+                    category === "All" || product.category === category;
+
+                return matchesSearch && matchesCategory;
+            });
+
+            if (filtered.length === 0) {
+                grid.innerHTML =
+                    '<p class="empty-message">No products found. Try another search.</p>';
+                return;
+            }
+
+            grid.innerHTML = filtered.map(product => `
+                <div class="product-card">
+                    <img
+                        src="${product.image}"
+                        alt="${product.name}"
+                        loading="lazy"
+                        onerror="this.onerror=null;this.src='https://placehold.co/600x400/1b1b23/ffffff?text=Anime+Product'">
+
+                    <div class="product-info">
+                        <span class="category">${product.category}</span>
+                        <h3>${product.name}</h3>
+                        <p class="description">${product.description}</p>
+
+                        <div class="product-bottom">
+                            <span class="price">₹${product.price}</span>
+                            <button class="add-btn"
+                                onclick="addToCart(${product.id})">
+                                + Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join("");
+        }
+
+        // Add a product
+        function addToCart(id) {
+            const product = products.find(item => item.id === id);
+            const existing = cart.find(item => item.id === id);
+
+            if (existing) {
+                existing.quantity++;
+            } else {
+                cart.push({ ...product, quantity: 1 });
+            }
+
+            renderCart();
+        }
+
+        // Remove a product
+        function removeFromCart(id) {
+            cart = cart.filter(item => item.id !== id);
+            renderCart();
+        }
+
+        // Update cart display
+        function renderCart() {
+            const items = document.getElementById("cart-items");
+
+            document.getElementById("cart-count").textContent =
+                cart.reduce((sum, item) => sum + item.quantity, 0);
+
+            document.getElementById("cart-total").textContent =
+                cart.reduce(
+                    (sum, item) => sum + item.price * item.quantity, 0
+                ).toLocaleString("en-IN");
+
+            if (cart.length === 0) {
+                items.innerHTML =
+                    '<p style="color:#aaa">Your cart is empty.</p>';
+                return;
+            }
+
+            items.innerHTML = cart.map(item => `
+                <div class="cart-item">
+                    <div>
+                        <strong>${item.name}</strong>
+                        <small>₹${item.price} × ${item.quantity}</small>
+                        <button class="remove-btn"
+                            onclick="removeFromCart(${item.id})">
+                            Remove
+                        </button>
+                    </div>
+
+                    <strong>₹${(
+                        item.price * item.quantity
+                    ).toLocaleString("en-IN")}</strong>
+                </div>
+            `).join("");
+        }
+
+        // Open and close cart
+        function toggleCart() {
+            document.getElementById("cart-panel")
+                .classList.toggle("open");
+        }
+
+        // Demo checkout
+        function checkout() {
+            if (cart.length === 0) {
+                alert("Your cart is empty!");
+                return;
+            }
+
+            alert(
+                "Demo order successful! Total: ₹" +
+                cart.reduce(
+                    (sum, item) => sum + item.price * item.quantity, 0
+                ).toLocaleString("en-IN") +
+                "\n\nThis demo does not process real payments."
+            );
+
+            cart = [];
+            renderCart();
+            toggleCart();
+        }
+
+        // Initial setup
+        renderProducts();
+        renderCart();
+    </script>
+
+</body>
+</html>
